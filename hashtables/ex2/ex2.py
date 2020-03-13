@@ -15,9 +15,19 @@ class Ticket:
 def reconstruct_trip(tickets, length):
     hashtable = HashTable(length)
     route = [None] * length
+    output = []
 
-    """
-    YOUR CODE HERE
-    """
+    # Insert tickets into hash table
+    for ticket in tickets:
+        hash_table_insert(hashtable, ticket.source, ticket.destination)
 
-    pass
+    # Begin from none and add rest to list
+    key = 'NONE'
+    value = hash_table_retrieve(hashtable, key)
+
+    while value != 'NONE':
+        output.append(value)
+        key = value
+        value = hash_table_retrieve(hashtable, key)
+
+    return output
