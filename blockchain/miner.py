@@ -10,7 +10,7 @@ from timeit import default_timer as timer
 import random
 
 
-def proof_of_work(last_proof, rand_step=999):
+def proof_of_work(last_proof, rand_step=1):
     """
     Multi-Ouroboros of Work Algorithm
     - Find a number p' such that the last six digits of hash(p) are equal
@@ -24,14 +24,14 @@ def proof_of_work(last_proof, rand_step=999):
 
     print("Searching for next proof")
     proof = 0
-    while valid_proof(block_string, proof) if False:
+    while valid_proof(last_proof, proof) is False:
         proof += random.randint(1, rand_step)
 
     print("Proof found: " + str(proof) + " in " + str(timer() - start))
     return proof
 
 
-def valid_proof(last_hash, proof):
+def valid_proof(last_proof, proof):
     """
     Validates the Proof:  Multi-ouroborus:  Do the last six characters of
     the hash of the last proof match the first six characters of the hash
@@ -39,18 +39,24 @@ def valid_proof(last_hash, proof):
 
     IE:  last_hash: ...AE9123456, new hash 123456E88...
     """
-
-    guess = f'{last_hash}{proof}'.encode()
-    guess_hash = hashlib.sha256(guess).hexdigest()
+    current_guess = f'{proof}'.encode()
+    last_guess = f'{last_proof}'.encode()
+    guess_hash = hashlib.sha256(current_guess).hexdigest()
+    last_hash = hashlib.sha256(last_guess).hexdigest()
     return guess_hash[:6] == last_hash[-6:]
 
 
 if __name__ == '__main__':
     # What node are we interacting with?
-    if len(sys.argv) > 1:
+    if len(sys.argv) > 1 and sys.argv[1] != 'none':
         node = sys.argv[1]
     else:
         node = "https://lambda-coin.herokuapp.com/api"
+
+    if len(sys.argv) > 2:
+        random_step = int(sys.argv[2])
+    else:
+        random_step = 1
 
     coins_mined = 0
 
@@ -68,7 +74,7 @@ if __name__ == '__main__':
         # Get the last proof from the server
         r = requests.get(url=node + "/last_proof")
         data = r.json()
-        new_proof = proof_of_work(data.get('proof'))
+        new_proof = proof_of_work(data.get('proof'), random_step)
 
         post_data = {"proof": new_proof,
                      "id": id}
