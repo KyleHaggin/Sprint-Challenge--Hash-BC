@@ -29,8 +29,12 @@ Access has runtime complexity of O(n). Adding and removing from the front has ru
 Worst case runtime complexity of extending the storage array is O(n).
 
 Explain how a blockchain is structured. What are the blocks, what is the chain? How is the data organized?
+
+A blockchain is a chain of blocks that use the concept of proof of work and computational power to decentralize security of its contents. A block consists of the proof of work, block contents (often trasnaction history in case of cryptocurrencies), and hash of previous block. The chain is the connection between these blocks via the previous block's hash.
  
 Explain how proof of work functions. How does it operate. How does this protect the chain from attack. What kind of attack is possible?
+
+The proof of work is the value that when used to hash the block, results in a specific set of circumstances (for example, 17 leading zeros in a sha256 hash, or first 6 of hash same as last 6 of previous hash for this sprint test). Due to the way that cryptographic hashes are implemented, a slight change to any block will require a complete recalculation of the proof of work. This prevents the unauthorized changing of previous blocks. In order to change a previous block, that block's proof of work, as well as every block after it's proof of work must be recaulculated by brute force alone, all while rushing to complete the calculations before every other miner can add more blocks to the chain. This means that any attack against a blockchain must be either at the front of the chain, or that the attacks has realms more processing power than every other miner combined.
 
 ## Project Set Up
 
