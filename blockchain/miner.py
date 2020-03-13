@@ -1,5 +1,6 @@
 import hashlib
 import requests
+import time
 
 import sys
 
@@ -23,7 +24,7 @@ def proof_of_work(last_proof, rand_step=1):
     start = timer()
 
     print("Searching for next proof")
-    proof = 0
+    proof = int(time.time())
     while valid_proof(last_proof, proof) is False:
         proof += random.randint(1, rand_step)
 
