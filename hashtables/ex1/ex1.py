@@ -23,7 +23,6 @@ def get_indices_of_item_weights(weights, length, limit):
             weight_index = hash_table_retrieve(ht, weight)
             if weight_index is None:
                 weight_index = 0
-            print([target_index, weight_index])
             return [target_index, weight_index]
 
     return None
